@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>作品集 · 网络与新媒体</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ===== 基础重置 & 全局 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --bg-primary: #0b0b1a;
+            --bg-secondary: #12122a;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0c0;
+            --accent-1: #6c5ce7;
+            --accent-2: #00cec9;
+            --accent-3: #fd79a8;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.10);
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --radius: 18px;
+            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* ===== 滚动条 ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-1);
+            border-radius: 10px;
+        }
+
+        /* ===== 导航栏 ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 16px 0;
+            background: rgba(11, 11, 26, 0.70);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+        .navbar.scrolled {
+            background: rgba(11, 11, 26, 0.92);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+        }
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .nav-logo span {
+            font-weight: 300;
+            -webkit-text-fill-color: var(--text-secondary);
+        }
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            position: relative;
+            letter-spacing: 0.3px;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            transition: var(--transition);
+        }
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .nav-links a.active {
+            color: var(--text-primary);
+        }
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+        .nav-toggle span {
+            display: block;
+            width: 26px;
+            height: 2.5px;
+            background: var(--text-primary);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 120px 0 80px;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 70%;
+            height: 120%;
+            background: radial-gradient(ellipse at 70% 50%, rgba(108, 92, 231, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: -10%;
+            width: 50%;
+            height: 80%;
+            background: radial-gradient(ellipse at 30% 70%, rgba(0, 206, 201, 0.10), transparent 70%);
+            pointer-events: none;
+        }
+        .hero .container {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+        }
+        .hero-content h1 .highlight {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin-bottom: 36px;
+            line-height: 1.8;
+        }
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(4px);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            border-color: transparent;
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(108, 92, 231, 0.30);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(108, 92, 231, 0.45);
+        }
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-3px);
+        }
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .hero-stats .stat {
+            display: flex;
+            flex-direction: column;
+        }
+        .hero-stats .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-stats .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .hero-avatar {
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            color: rgba(255, 255, 255, 0.15);
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 30px 80px rgba(108, 92, 231, 0.20);
+        }
+        .hero-avatar .emoji-big {
+            font-size: 7rem;
+            filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.3));
+        }
+        .hero-avatar::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+            opacity: 0.20;
+            filter: blur(30px);
+            z-index: -1;
+            animation: pulse-ring 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        @keyframes pulse-ring {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.20;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.35;
+            }
+        }
+        .floating-badge {
+            position: absolute;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            animation: float 5s ease-in-out infinite;
+            box-shadow: var(--shadow);
+        }
+        .floating-badge i {
+            font-size: 1.2rem;
+            color: var(--accent-2);
+        }
+        .floating-badge:nth-child(2) {
+            top: 10%;
+            right: -10%;
+            animation-delay: 0.5s;
+        }
+        .floating-badge:nth-child(3) {
+            bottom: 10%;
+            left: -10%;
+            animation-delay: 1s;
+        }
+        .floating-badge:nth-child(4) {
+            top: 50%;
+            left: -15%;
+            animation-delay: 1.5s;
+        }
+
+        /* ===== 作品集区域 ===== */
+        .portfolio {
+            padding: 100px 0 120px;
+            background: var(--bg-secondary);
+            position: relative;
+        }
+        .portfolio::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(108, 92, 231, 0.30), transparent);
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section-header .label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-2);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .section-header h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+        .section-header p {
+            color: var(--text-secondary);
+            max-width: 520px;
+            margin: 12px auto 0;
+        }
+
+        /* 筛选按钮 */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 50px;
+        }
+        .filter-btn {
+            padding: 10px 24px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(4px);
+        }
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.10);
+            color: var(--text-primary);
+        }
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.30);
+        }
+
+        /* 作品网格 */
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 28px;
+        }
+        .work-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 20px 20px 20px;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .work-card a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+        .work-card .card-image {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 14px;
+            background: rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--text-secondary);
+        }
+        .work-card .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .work-card .card-image .placeholder-icon {
+            opacity: 0.3;
+        }
+        .work-card .card-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-2);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .work-card h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+        .work-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            flex: 1;
+            margin-bottom: 10px;
+        }
+        .work-card .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: auto;
+        }
+        .work-card .card-tags span {
+            font-size: 0.65rem;
+            padding: 3px 12px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .work-card .card-number {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 2rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.04);
+            line-height: 1;
+            pointer-events: none;
+        }
+        .work-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 255, 255, 0.20);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        /* 颜色主题 */
+        .work-card.color-1 .card-image { background: rgba(231, 76, 60, 0.12); }
+        .work-card.color-2 .card-image { background: rgba(243, 156, 18, 0.12); }
+        .work-card.color-3 .card-image { background: rgba(52, 152, 219, 0.12); }
+        .work-card.color-4 .card-image { background: rgba(155, 89, 182, 0.12); }
+        .work-card.color-5 .card-image { background: rgba(46, 204, 113, 0.12); }
+        .work-card.color-6 .card-image { background: rgba(233, 30, 99, 0.12); }
+        .work-card.color-7 .card-image { background: rgba(26, 188, 156, 0.12); }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        /* ===== 关于区域 ===== */
+        .about {
+            padding: 100px 0;
+            background: var(--bg-primary);
+            position: relative;
+        }
+        .about .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .about-content h2 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+        .about-content p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .about-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 24px;
+        }
+        .about-skills span {
+            padding: 8px 20px;
+            border-radius: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        .about-skills span:hover {
+            background: rgba(255, 255, 255, 0.10);
+            color: var(--text-primary);
+        }
+        .about-image {
+            display: flex;
+            justify-content: center;
+        }
+        .about-image .card-placeholder {
+            width: 100%;
+            max-width: 420px;
+            aspect-ratio: 1 / 1;
+            border-radius: var(--radius);
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.15), rgba(0, 206, 201, 0.10));
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+        }
+        .about-image .card-placeholder i {
+            font-size: 4rem;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+        .about-image .card-placeholder h4 {
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+        .about-image .card-placeholder p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ===== 联系区域 ===== */
+        .contact {
+            padding: 100px 0 80px;
+            background: var(--bg-secondary);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .contact .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .contact h2 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        .contact p {
+            color: var(--text-secondary);
+            max-width: 480px;
+            margin-bottom: 36px;
+        }
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .contact-links a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            border-radius: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        .contact-links a:hover {
+            background: rgba(255, 255, 255, 0.10);
+            color: var(--text-primary);
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.20);
+        }
+        .contact-links a i {
+            font-size: 1.2rem;
+        }
+        .contact-links a .fa-envelope {
+            color: var(--accent-1);
+        }
+        .contact-links a .fa-github {
+            color: #fff;
+        }
+        .contact-links a .fa-bilibili {
+            color: #fb7299;
+        }
+        .contact-links a .fa-weixin {
+            color: #07c160;
+        }
+
+        /* ===== 页脚 ===== */
+        .footer {
+            padding: 30px 0;
+            background: var(--bg-primary);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .footer span {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 1024px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero-cta {
+                justify-content: center;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .hero-avatar {
+                width: 280px;
+                height: 280px;
+                font-size: 5rem;
+            }
+            .hero-avatar .emoji-big {
+                font-size: 4.5rem;
+            }
+            .floating-badge {
+                display: none;
+            }
+            .about .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .about-skills {
+                justify-content: center;
+            }
+            .about-image .card-placeholder {
+                max-width: 320px;
+                margin: 0 auto;
+            }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                gap: 16px;
+                position: absolute;
+                top: 70px;
+                left: 20px;
+                right: 20px;
+                background: rgba(11, 11, 26, 0.95);
+                backdrop-filter: blur(20px);
+                padding: 30px 20px;
+                border-radius: var(--radius);
+                border: 1px solid var(--glass-border);
+                box-shadow: var(--shadow);
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .nav-toggle {
+                display: flex;
+            }
+            .hero-content h1 {
+                font-size: 2.6rem;
+            }
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            .works-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+            .work-card {
+                padding: 16px 14px 14px;
+            }
+            .work-card .card-image {
+                aspect-ratio: 16 / 9;
+            }
+            .work-card h3 {
+                font-size: 0.95rem;
+            }
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 0.75rem;
+            }
+            .hero-stats {
+                gap: 24px;
+                flex-wrap: wrap;
+            }
+            .contact-links a {
+                padding: 12px 24px;
+                font-size: 0.9rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .works-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 0 16px;
+            }
+            .hero-avatar {
+                width: 200px;
+                height: 200px;
+                font-size: 3.5rem;
+            }
+            .hero-avatar .emoji-big {
+                font-size: 3rem;
+            }
+            .btn {
+                padding: 12px 24px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== 导航栏 ========== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#" class="nav-logo">作品<span>集</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#portfolio" class="active">作品</a></li>
+                <li><a href="#about">关于</a></li>
+                <li><a href="#contact">联系</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="菜单">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========== Hero ========== -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>
+                    你好，我是<br />
+                    <span class="highlight">新媒体创作者</span>
+                </h1>
+                <p>
+                    网络与新媒体专业 · 用影像、设计与代码讲述故事。
+                    这里是我从长视频到 Unity 场景的多元作品集。
+                </p>
+                <div class="hero-cta">
+                    <a href="#portfolio" class="btn btn-primary">
+                        <i class="fas fa-arrow-right"></i> 浏览作品
+                    </a>
+                    <a href="#contact" class="btn btn-outline">
+                        <i class="fas fa-comment"></i> 联系我
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">7</span>
+                        <span class="stat-label">创作领域</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">28+</span>
+                        <span class="stat-label">代表作品</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">3+</span>
+                        <span class="stat-label">年经验</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-avatar">
+                    <span class="emoji-big">🎬</span>
+                </div>
+                <div class="floating-badge" style="top: 5%; right: -5%;">
+                    <i class="fas fa-video"></i> 长视频
+                </div>
+                <div class="floating-badge" style="bottom: 10%; left: -8%;">
+                    <i class="fas fa-camera"></i> 摄影
+                </div>
+                <div class="floating-badge" style="top: 55%; left: -12%;">
+                    <i class="fas fa-code"></i> 静态网站
+                </div>
+                <div class="floating-badge" style="bottom: 20%; right: -8%;">
+                    <i class="fas fa-cube"></i> Unity
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 作品集 ========== -->
+    <section class="portfolio" id="portfolio">
+        <div class="container">
+            <div class="section-header">
+                <div class="label">精选作品</div>
+                <h2>创作 · 多元 · 专业</h2>
+                <p>点击筛选查看不同类别的作品，每一件都凝聚了新媒体人的思考与表达。</p>
+            </div>
+
+            <!-- 筛选栏 -->
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="长视频">🎬 长视频</button>
+                <button class="filter-btn" data-filter="短视频">📱 短视频</button>
+                <button class="filter-btn" data-filter="摄影作品">📷 摄影</button>
+                <button class="filter-btn" data-filter="海报设计">🎨 海报</button>
+                <button class="filter-btn" data-filter="静态网站">💻 静态网站</button>
+                <button class="filter-btn" data-filter="秀米/ivx">📄 秀米/ivx</button>
+                <button class="filter-btn" data-filter="unity场景搭建">🎮 Unity</button>
+            </div>
+
+            <!-- 作品网格 -->
+            <div class="works-grid" id="worksGrid">
+                <!-- 由 JavaScript 动态渲染 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 关于 ========== -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <h2>关于 <span style="background:linear-gradient(135deg,var(--accent-1),var(--accent-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">我</span></h2>
+                <p>
+                    网络与新媒体专业在读，热爱用影像、设计与交互技术传递信息。
+                    从长片叙事到 Unity 场景搭建，我不断探索媒介的边界，追求有温度、有深度的表达。
+                </p>
+                <p>
+                    相信好的作品能跨越屏幕，触达人心。这里展示的每一件作品，都是我专业成长的注脚。
+                </p>
+                <div class="about-skills">
+                    <span>🎬 视频剪辑</span>
+                    <span>📷 摄影</span>
+                    <span>🎨 平面设计</span>
+                    <span>💻 前端开发</span>
+                    <span>📱 新媒体运营</span>
+                    <span>🎮 Unity 场景</span>
+                    <span>✍️ 文案策划</span>
+                </div>
+            </div>
+            <div class="about-image">
+                <div class="card-placeholder">
+                    <i class="fas fa-user-astronaut"></i>
+                    <h4>新媒体创作人</h4>
+                    <p>用专业与热爱，讲好每一个故事</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 联系 ========== -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2>📬 保持 <span style="background:linear-gradient(135deg,var(--accent-1),var(--accent-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">联系</span></h2>
+            <p>有合作想法或想聊聊创作？欢迎通过以下方式找到我。</p>
+            <div class="contact-links">
+                <a href="mailto:your.email@example.com"><i class="fas fa-envelope"></i> 邮箱</a>
+                <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                <a href="#"><i class="fab fa-bilibili"></i> B站</a>
+                <a href="#"><i class="fab fa-weixin"></i> 微信</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 页脚 ========== -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 <span>作品集</span> · 网络与新媒体专业 · 用创作连接世界</p>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================================
+        //  数据：7 个类别
+        // ============================================================
+        const worksData = [{
+            id: 1,
+            category: '短视频',
+            title: 'B站 · 这一点也不恐怖',
+            desc: '由我独立剪辑的B站账号，主打创意与趣味内容。',
+            icon: 'fa-film',
+            color: 'color-1',
+            tags: ['B站', '剪辑', '创意'],
+            link: 'https://space.bilibili.com/3546633501411602',
+            image: 'https://i0.hdslb.com/bfs/space/ae97b0b5df9a2f339ea5eddd83ef2824d94a9adc.png'
+        }, {
+            id: 2,
+            category: '长视频',
+            title: '新片场 · 作品1',
+            desc: '在新片场发布的长视频作品，展现叙事与影像能力。',
+            icon: 'fa-play-circle',
+            color: 'color-1',
+            tags: ['新片场', '叙事', '影像'],
+            link: 'https://www.xinpianchang.com/a13722801?token=A9MTz4bqjvp3MJlhg1VQpBQ&channel=copyLink&from=webShare',
+            image: 'https://img.xinpianchang.com/cover.jpg'
+        }, {
+            id: 3,
+            category: '长视频',
+            title: '新片场 · 作品2',
+            desc: '另一部长视频作品，探索不同的题材与风格。',
+            icon: 'fa-play-circle',
+            color: 'color-1',
+            tags: ['新片场', '创作', '风格'],
+            link: 'https://www.xinpianchang.com/a13722793?token=1a30kO2HD0jG2SkN9e2oR1gH&channel=copyLink&from=webShare',
+            image: 'https://img.xinpianchang.com/cover.jpg'
+        }, {
+            id: 4,
+            category: '长视频',
+            title: '新片场 · 作品3',
+            desc: '第三部长视频作品，持续探索影像表达的边界。',
+            icon: 'fa-play-circle',
+            color: 'color-1',
+            tags: ['新片场', '探索', '表达'],
+            link: 'https://www.xinpianchang.com/a13729115?from=webShare&channel=copyLink&token=V4wVA3mMnZ13UZCBfgW3Pp',
+            image: 'https://img.xinpianchang.com/cover.jpg'
+        }, {
+          
+            id: 5,
+            category: '摄影作品',
+            title: '摄影 · 光影集',
+            desc: '按时间顺序排列的摄影作品，记录光影与瞬间。点击进入摄影画廊。',
+            icon: 'fa-camera',
+            color: 'color-2',
+            tags: ['摄影', '时间', '光影'],
+            link: 'gallery.html',   // 指向摄影展示页
+            image: ''               // 留空，使用图标占位
+        }, {
+            id: 6,
+            category: '海报设计',
+            title: '海报 · 视觉表达',
+            desc: '按时间顺序排列的海报设计作品，探索图形与语义。',
+            icon: 'fa-palette',
+            color: 'color-4',
+            tags: ['海报', '设计', '视觉'],
+            link: '#',
+            image: ''
+        }, {
+            id: 7,
+            category: '静态网站',
+            title: '每日任务打卡系统',
+            desc: '一个帮助养成习惯的打卡工具，简洁实用。',
+            icon: 'fa-check-circle',
+            color: 'color-5',
+            tags: ['打卡', '习惯', '工具'],
+            link: 'https://3321894891.github.io/jiaomu/',
+            image: 'https://3321894891.github.io/jiaomu/'
+        }, {
+            id: 8,
+            category: '静态网站',
+            title: '专注番茄钟',
+            desc: '亲手打造的番茄钟工具，助力高效专注。[reference:5]',
+            icon: 'fa-clock',
+            color: 'color-5',
+            tags: ['番茄钟', '专注', '工具'],
+            link: 'https://3321894891.github.io/fanqiezhong/',
+            image: 'https://3321894891.github.io/fanqiezhong/'
+        }, {
+            id: 9,
+            category: '秀米/ivx',
+            title: '秀米 · 会议纪要',
+            desc: '用秀米制作的「问题青少年，藏在电子屏幕后」专题页面。[reference:6]',
+            icon: 'fa-file-alt',
+            color: 'color-6',
+            tags: ['秀米', '排版', '专题'],
+            link: 'https://v.xiumius.cn/board/v5/6ISKS/581858615',
+            image: 'https://v.xiumius.cn/board/v5/6ISKS/581858615'
+        }, {
+            id: 10,
+            category: 'unity场景搭建',
+            title: 'Unity · 场景搭建',
+            desc: '使用Unity引擎搭建的3D场景，探索虚拟空间叙事。',
+            icon: 'fa-cube',
+            color: 'color-7',
+            tags: ['Unity', '3D', '场景'],
+            link: '#',
+            image: ''
+        }];
+
+        // ============================================================
+        //  渲染作品
+        // ============================================================
+        const grid = document.getElementById('worksGrid');
+
+        function renderWorks(filter = 'all') {
+            const filtered = filter === 'all' ?
+                worksData :
+                worksData.filter(w => w.category === filter);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <p>没有找到该分类的作品，试试其他类别吧</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map((w, index) => {
+                // 处理图片：如果是链接则用img，否则显示占位图标
+                let imageHtml = '';
+                if (w.image && (w.image.startsWith('http://') || w.image.startsWith('https://'))) {
+                    // 如果是页面链接，尝试用favicon或截图，这里简单用占位
+                    imageHtml = `<div class="card-image" style="background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--text-secondary);">
+                        <i class="fas ${w.icon}"></i>
+                    </div>`;
+                } else {
+                    imageHtml = `<div class="card-image" style="background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--text-secondary);">
+                        <i class="fas ${w.icon}"></i>
+                    </div>`;
+                }
+
+                return `
+                    <div class="work-card ${w.color}" data-category="${w.category}">
+                        <a href="${w.link}" target="_blank" rel="noopener noreferrer">
+                            <div class="card-number">${String(index + 1).padStart(2, '0')}</div>
+                            ${imageHtml}
+                            <div class="card-category">${w.category}</div>
+                            <h3>${w.title}</h3>
+                            <p>${w.desc}</p>
+                            <div class="card-tags">
+                                ${w.tags.map(t => `<span>#${t}</span>`).join('')}
+                            </div>
+                        </a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================================
+        //  筛选逻辑
+        // ============================================================
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const filter = this.dataset.filter;
+                renderWorks(filter);
+            });
+        });
+
+        // ============================================================
+        //  导航交互
+        // ============================================================
+        const navbar = document.getElementById('navbar');
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        const navAnchors = navLinks.querySelectorAll('a');
+
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+
+        navAnchors.forEach(anchor => {
+            anchor.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+            });
+        });
+
+        const sections = document.querySelectorAll('section[id]');
+
+        function updateNav() {
+            if (window.scrollY > 60) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            let current = '';
+            sections.forEach(sec => {
+                const top = sec.offsetTop - 120;
+                if (window.scrollY >= top) {
+                    current = sec.getAttribute('id');
+                }
+            });
+
+            navAnchors.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === `#${current}`) {
+                    a.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateNav);
+        window.addEventListener('load', updateNav);
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        renderWorks('all');
+
+        console.log('🎬 作品集已加载 · 网络与新媒体专业');
+        console.log('📦 共 ' + worksData.length + ' 件作品，7 个类别');
+    </script>
+
+</body>
+</html>
